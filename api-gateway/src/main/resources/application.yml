@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: timeout_fallback
+          uri: http://localhost:4001
+          predicates:
+            - Path=/fallback
+        - id: circuitbreaker_route
+          uri: http://localhost:4001
+          predicates:
+            - Path=/timeout
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: c1
+                fallbackUri: forward:/fallback
+#                fallbackUri: forward:/localfallback
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      slowCallDurationThreshold: 2s
+      slowCallRateThreshold: 10
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+      ignoreExceptions:
+        - java.lang.IllegalStateException
+  instances:
+    c1:
+      baseConfig: default
