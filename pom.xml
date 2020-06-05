@@ -13,6 +13,7 @@
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <packaging>pom</packaging>
     <groupId>com.example</groupId>
     <artifactId>gateway-fallback</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -20,7 +21,7 @@
     <description>reproduce</description>
     <properties>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
     </properties>
 
     <dependencyManagement>

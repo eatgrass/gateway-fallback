@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: api-gateway
@@ -14,13 +15,17 @@ spring:
         - id: circuitbreaker_route
           uri: http://localhost:4001
           predicates:
-            - Path=/timeout
+            - Path=/a/**
           filters:
             - name: CircuitBreaker
               args:
                 name: c1
-#                fallbackUri: forward:/fallback
-                fallbackUri: forward:/localfallback
+                fallbackUri: forward:/fallback
+        - id: local
+          uri: forward:/localhost:4001/fallback
+          predicates:
+            - Path=/local
+
 
 resilience4j.circuitbreaker:
   configs:
@@ -32,7 +37,7 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 10s
       failureRateThreshold: 50
       eventConsumerBufferSize: 10
-      slowCallDurationThreshold: 1s
+      slowCallDurationThreshold: 5s
       slowCallRateThreshold: 10
       recordExceptions:
         - org.springframework.web.client.HttpServerErrorException
@@ -43,3 +48,9 @@ resilience4j.circuitbreaker:
     c1:
       baseConfig: default
       slowCallDurationThreshold: 1s
+    c2:
+      baseConfig: default
+      slowCallDurationThreshold: 2s
+
+server:
+  port: 8044

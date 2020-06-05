@@ -15,9 +15,9 @@ public class ServiceApplication {
         SpringApplication.run(ServiceApplication.class, args);
     }
 
-    @GetMapping("/timeout")
+    @GetMapping("/a/cb")
     public ResponseEntity timeout() throws InterruptedException {
-        System.out.println("request accepted");
+        Thread.sleep(3500);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
     }
 
